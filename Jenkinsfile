@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         DOCKER_BUILDKIT = '1'
-        DOCKER_REG = 'ghcr.io/Hacksawfred3232/CustAMPImages'
+        DOCKER_REG = 'ghcr.io/hacksawfred3232/custampimages'
     }
     stages {
         stage('Main') {
