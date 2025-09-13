@@ -36,7 +36,7 @@ pipeline {
                                 dir(builds[buildsi]["dir"]) {
                                     if (builds[buildsi]["tags"][buildsitag]["need-builder"] == true) {
                                         echo("Builder requested.")
-                                        sh("docker buildx create --bootstrap --driver docker-container --name multiarch --driver-opt image=gitea.twilightcyberlycan.me.uk/tclnet/moby/buildkit:buildx-stable-1-mod")
+                                        sh("docker buildx create --bootstrap --driver docker-container --name multiarch --driver-opt image=cloudman-gitea.twilightcyberlycan.me.uk/tclnet/moby/buildkit:buildx-stable-1-mod")
                                         finalArgs = " --builder multiarch${builds[buildsi]['tags'][buildsitag]['args']}"
                                     } else {
                                         finalArgs = builds[buildsi]['tags'][buildsitag]['args']
