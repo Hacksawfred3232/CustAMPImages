@@ -28,7 +28,7 @@ COPY --from=build /root/srb2 /srb2linux.exe
 # Running upgrade command.
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y upgrade
 # Shortened version of the list above.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget unzip libsdl2-mixer-dev libpng-dev libcurl4-openssl-dev libgme-dev libopenmpt-dev libminiupnpc-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install ca-certificates wget unzip libsdl2-mixer-2.0-0 libpng16-16 libcurl4 libgme0 libopenmpt0 libminiupnpc17
 # Running clean up.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Ensure that WORKDIR is /

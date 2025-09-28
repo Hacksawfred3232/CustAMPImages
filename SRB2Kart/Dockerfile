@@ -40,7 +40,7 @@ COPY --from=build /root/srb2kart /srb2kartlinux.exe
 # Running upgrade command.
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y upgrade
 # Shortened version of the list above.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libpng-dev zlib1g-dev libsdl2-dev libsdl2-mixer-dev libgme-dev libgme0 libopenmpt-dev libupnp-dev libupnp13 libcurl4-openssl-dev wget unzip
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install libpng16-16 zlib1g libsdl2-2.0-0 libsdl2-mixer-2.0-0 libgme0 libopenmpt0 libupnp13 libcurl4 ca-certificates wget unzip
 # Running clean up.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Ensure that WORKDIR is /

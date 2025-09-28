@@ -36,7 +36,7 @@ COPY --from=build /root/ringracers /ringracerslinux.exe
 # Running upgrade command.
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get -y upgrade
 # Shortened version of the list above.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libcurl4-openssl-dev zlib1g-dev libpng++-dev libpng-dev libogg-dev libvorbis-dev libvpx-dev libyuv-dev libupnp-dev libupnp13 libsdl2-dev libsdl2-mixer-dev wget unzip
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install libcurl4 zlib1g libpng16-16 libogg0 libvorbis0a libvpx7 libyuv0 libupnp13 libsdl2-2.0-0 libsdl2-mixer-2.0-0 ca-certificates wget unzip
 # Running clean up.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Ensure that WORKDIR is /
