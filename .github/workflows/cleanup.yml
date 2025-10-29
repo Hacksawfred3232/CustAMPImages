@@ -15,9 +15,12 @@ jobs:
           delete-only-untagged-versions: true
           package-name: 'custampimages/ampcust'
           package-type: 'container'
+          owner: 'Hacksawfred3232'
+          min-versions-to-keep: 0
       - uses: actions/delete-package-versions@v5.0.0
         with:
           package-name: 'custampimages/ampcust'
           package-type: 'container'
           min-versions-to-keep: 9
+          owner: 'Hacksawfred3232'
           ignore-versions: '^srb2$|^srb2kart$|^ringracers$'
