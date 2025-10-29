@@ -13,15 +13,15 @@ pipeline {
                 script {
                     def builds = [
                         ["pushto":"ampcust","dir": "SRB2", "tags":[
-                            ["name":"v1.0.0-srb2","expect-stable":true,"need-builder":false,"args":"-t srb2"]
+                            ["name":"v1.0.0-srb2","expect-stable":true,"need-builder":false,"args":" -t srb2"]
                         ]
                         ],
                         ["pushto":"ampcust","dir": "SRB2Kart", "tags":[
-                            ["name":"v1.0.0-srb2kart","expect-stable":true,"need-builder":false,"args":"-t srb2kart"]
+                            ["name":"v1.0.0-srb2kart","expect-stable":true,"need-builder":false,"args":" -t srb2kart"]
                         ]
                         ],
                         ["pushto":"ampcust","dir": "RingRacers", "tags":[
-                            ["name":"v1.0.0-ringracers","expect-stable":true,"need-builder":false,"args":"-t ringracers"]
+                            ["name":"v1.0.0-ringracers","expect-stable":true,"need-builder":false,"args":" -t ringracers"]
                         ]
                         ],
                     ]
