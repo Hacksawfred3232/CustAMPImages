@@ -13,15 +13,15 @@ pipeline {
                 script {
                     def builds = [
                         ["pushto":"ampcust","dir": "SRB2", "tags":[
-                            ["name":"srb2","expect-stable":true,"need-builder":false,"args":""]
+                            ["name":"v1.0.0-srb2","expect-stable":true,"need-builder":false,"args":"-t srb2"]
                         ]
                         ],
                         ["pushto":"ampcust","dir": "SRB2Kart", "tags":[
-                            ["name":"srb2kart","expect-stable":true,"need-builder":false,"args":""]
+                            ["name":"v1.0.0-srb2kart","expect-stable":true,"need-builder":false,"args":"-t srb2kart"]
                         ]
                         ],
                         ["pushto":"ampcust","dir": "RingRacers", "tags":[
-                            ["name":"ringracers","expect-stable":true,"need-builder":false,"args":""]
+                            ["name":"v1.0.0-ringracers","expect-stable":true,"need-builder":false,"args":"-t ringracers"]
                         ]
                         ],
                     ]
@@ -32,20 +32,29 @@ pipeline {
                             } else {
                                 finalVerName = "0.0.${env.BUILD_NUMBER}-${builds[buildsi]['tags'][buildsitag]['name']}"
                             }
-                            docker.withRegistry("https://${env.DOCKER_REG}",'githubtok') {
-                                dir(builds[buildsi]["dir"]) {
-                                    if (builds[buildsi]["tags"][buildsitag]["need-builder"] == true) {
-                                        echo("Builder requested.")
-                                        sh("docker buildx create --bootstrap --driver docker-container --name multiarch --driver-opt image=cloudman-gitea.twilightcyberlycan.me.uk/tclnet/moby/buildkit:buildx-stable-1-mod")
-                                        finalArgs = " --builder multiarch${builds[buildsi]['tags'][buildsitag]['args']}"
-                                    } else {
-                                        finalArgs = builds[buildsi]['tags'][buildsitag]['args']
-                                    }
-                                    outImg = docker.build("${env.DOCKER_REG}/${builds[buildsi]['pushto']}:${finalVerName}", ". --push${finalArgs}")
-                                    if (builds[buildsi]["tags"][buildsitag]["need-builder"] == true) {
-                                        sh("docker buildx rm multiarch")
+                            def checkStatusCode = sh(returnStatus:true,script:"docker manifest inspect ${env.DOCKER_REG}/${builds[buildsi]['pushto']}:${finalVerName}")
+                            if (checkStatusCode == 0) {
+                                echo("Found an existing image, will not rebuild!")
+                                echo("Either delete existing image, or bump version number.")
+                            } else if (checkStatusCode == 1) {
+                                echo("Didn't find the image in registry ${env.DOCKER_REG}, or some other status code 1 error. (Re)Building image.")
+                                docker.withRegistry("https://${env.DOCKER_REG}",'githubtok') {
+                                    dir(builds[buildsi]["dir"]) {
+                                        if (builds[buildsi]["tags"][buildsitag]["need-builder"] == true) {
+                                            echo("Builder requested.")
+                                            sh("docker buildx create --bootstrap --driver docker-container --name multiarch --driver-opt image=cloudman-gitea.twilightcyberlycan.me.uk/tclnet/moby/buildkit:buildx-stable-1-mod")
+                                            finalArgs = " --builder multiarch${builds[buildsi]['tags'][buildsitag]['args']}"
+                                        } else {
+                                            finalArgs = builds[buildsi]['tags'][buildsitag]['args']
+                                        }
+                                        outImg = docker.build("${env.DOCKER_REG}/${builds[buildsi]['pushto']}:${finalVerName}", ". --push${finalArgs}")
+                                        if (builds[buildsi]["tags"][buildsitag]["need-builder"] == true) {
+                                            sh("docker buildx rm multiarch")
+                                        }
                                     }
                                 }
+                            } else {
+                                error("Found non-zero or one status code when inspecting remote manifest. Stopping...")
                             }
                         }
                     }
