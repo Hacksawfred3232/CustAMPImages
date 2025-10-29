@@ -4,16 +4,16 @@ on:
   schedule:
     - cron: "0 0 * * *"
 jobs:
-  - name: Cleanup untagged images
-    uses: actions/delete-package-versions@v5.0.0
-    with:
-      delete-only-untagged-versions: true
-      package-name: 'custampimages/ampcust'
-      package-type: 'container'
-  - name: Cleanup old versions
-    uses: actions/delete-package-versions@v5.0.0
-    with:
-      package-name: 'custampimages/ampcust'
-      package-type: 'container'
-      min-versions-to-keep: 9
-      ignore-versions: '^srb2$|^srb2kart$|^ringracers$'
+  cleanup:
+    steps:
+      - uses: actions/delete-package-versions@v5.0.0
+        with:
+          delete-only-untagged-versions: true
+          package-name: 'custampimages/ampcust'
+          package-type: 'container'
+      - uses: actions/delete-package-versions@v5.0.0
+        with:
+          package-name: 'custampimages/ampcust'
+          package-type: 'container'
+          min-versions-to-keep: 9
+          ignore-versions: '^srb2$|^srb2kart$|^ringracers$'
